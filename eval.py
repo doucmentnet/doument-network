@@ -199,15 +199,15 @@ with tf.Session(config=config) as session:
         train()
         test()
         codes_train, codes_test, train_label, test_label = read()
-        rss = []
         rs = eval_acc(codes_train, codes_test, train_label, test_label)
+        rss_ac.append(rs)
+        print('Acc:')
+        print(rss_ac)
         test_list = [25, 50, 100]
-        rss_retrieval = []
+        rs_retrieval = []
         for s in test_list:
             rs = eval_total(codes_train, codes_test, train_label, test_label, s, s)
-            rss.append(rs)
-            print('P, mAP:')
-            print(rss_retrieval)
-        rss.append(rs)
-        print('Acc:')
-        print(rss)
+            rs_retrieval.append(rs)
+        rss_re.append(rs_retrieval)
+        print('P, mAP:')
+        print(rss_re)
