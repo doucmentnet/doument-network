@@ -16,14 +16,14 @@ class models:
         return tf.contrib.rnn.BasicLSTMCell(self.h)
 
     def Encoder(self, txts, sen_size, reuse = False):
-        with tf.variable_scope('encoder', reuse=reuse):
-            lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=self.h, reuse=False)
-            #lstm_cell2 = tf.contrib.rnn.BasicLSTMCell(num_units=self.h, reuse=False)
-            #lstm_cell = tf.nn.rnn_cell.MultiRNNCell([lstm_cell1, lstm_cell2])
+                with tf.variable_scope('encoder', reuse=reuse):
+            lstm_cell1 = tf.contrib.rnn.BasicLSTMCell(num_units=self.h, reuse=False)
+            lstm_cell2 = tf.contrib.rnn.BasicLSTMCell(num_units=self.h, reuse=False)
+            lstm_cell = tf.nn.rnn_cell.MultiRNNCell([lstm_cell1, lstm_cell2])
             state = lstm_cell.zero_state(self.b, tf.float32)
             with tf.variable_scope('lstm'):
                 _, final_state = tf.nn.dynamic_rnn(cell=lstm_cell, inputs=txts, dtype=tf.float32, sequence_length=sen_size, initial_state=state)
-                final_out = tf.tanh(tf.layers.dense(tf.concat([final_state[0], final_state[1]], 1), self.d, name='outputs'))
+                final_out = tf.tanh(tf.layers.dense(tf.concat([final_state[0][0], final_state[1][0],final_state[0][1], final_state[1][1]], 1), self.d, name='outputs'))
             return final_out
 
 
